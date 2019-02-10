@@ -4,17 +4,23 @@ from osbrain import run_agent
 from osbrain import run_nameserver
 
 
-
 def log_message(agent, message):
     agent.log_info('Received: %s' % message)
-
-def count_message(agent, message):
-
-    if(message != 0):
-        print("we got msg!")
+    if message != 0:
+        if sensor1:
+            print("we got msg!")
 
 
+def number_of_msgs(agent, number):
+    print("Halo")
 
+
+# def count_message(agent, message):
+#     global msg_count
+#     if(message != 0):
+#         msg_count += 1
+#         print("we got msg!")
+#         print(msg_count)
 
 def deploy_data(agent):
 
@@ -33,10 +39,13 @@ if __name__ == '__main__':
     sensor2 = run_agent('Sensor2')
     receiver = run_agent('Receiver')
 
+
     addr1 = sensor1.bind('PUSH', alias='Data1')
     addr2 = sensor2.bind('PUSH', alias='Data2')
-    receiver.connect(addr1, handler=[log_message, count_message])
+    receiver.connect(addr1, handler=log_message)
     receiver.connect(addr2, handler=log_message)
+
+
 
     # Multiple timers with parameters
     sensor1.each(1.0, deploy_data)
@@ -44,8 +53,10 @@ if __name__ == '__main__':
 
 
 
-
     time.sleep(10)
 
+    #print(msg_count)
 
     ns.shutdown()
+
+
